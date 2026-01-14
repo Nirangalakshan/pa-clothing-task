@@ -32,7 +32,7 @@ const Footer = () => {
                     <h4 className="text-white font-semibold uppercase tracking-wider text-sm">Support</h4>
                     <ul className="flex flex-col gap-4 text-white/50 text-sm">
                         <li><a href="#" className="hover:text-white hover:pl-2 transition-all">FAQ</a></li>
-                        <li><a href="#" className="hover:text-white hover:pl-2 transition-all">Shipping</a></li>
+                        <li><a href="#" className="hover:text-white hover:pl-2 transition-all">Order Tracking</a></li>
                         <li><a href="#" className="hover:text-white hover:pl-2 transition-all">Returns</a></li>
                         <li><a href="#" className="hover:text-white hover:pl-2 transition-all">Size Guide</a></li>
                     </ul>

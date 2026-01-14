@@ -1,27 +1,38 @@
 import express from "express";
 import Cart from "../models/cart.js";
+import jwt from "jsonwebtoken";
+import User from "../models/user.js";
 
 const router = express.Router();
+
+// Helper to get userId from token if exists
+const getUserId = async (req) => {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      return decoded.id;
+    } catch (err) {
+      return null;
+    }
+  }
+  return null;
+};
+
+// Helper to find cart by user or sessionId
+const getCartQuery = async (req) => {
+  const userId = await getUserId(req);
+  if (userId) return { user: userId };
+  return { sessionId: req.headers["x-session-id"] };
+};
 
 // Get cart
 router.get("/", async (req, res) => {
   try {
-    const sessionId = req.headers["x-session-id"];
-    const userId = req.headers["authorization"] ? null : null; // Logic handled below
-
-    let query = {};
-    if (req.headers["authorization"]) {
-      // Logic for authenticated user
-      // Assuming middleware attaches user to req if present,
-      // but for simplicity in this specific route before full middleware implementation:
-      // Actually let's use a more robust way if we have the protect middleware.
-    }
-
-    // For now, let's keep it simple as implemented before
-    if (req.headers["x-session-id"]) {
-      query.sessionId = sessionId;
-    }
-
+    const query = await getCartQuery(req);
     const cart = await Cart.findOne(query).populate("items.product");
     res.status(200).json(cart || { items: [] });
   } catch (err) {
@@ -33,12 +44,14 @@ router.get("/", async (req, res) => {
 router.post("/add", async (req, res) => {
   try {
     const { productId, size, quantity } = req.body;
+    const userId = await getUserId(req);
     const sessionId = req.headers["x-session-id"];
+    const query = userId ? { user: userId } : { sessionId };
 
-    let cart = await Cart.findOne({ sessionId });
+    let cart = await Cart.findOne(query);
 
     if (!cart) {
-      cart = new Cart({ sessionId, items: [] });
+      cart = new Cart({ ...query, items: [] });
     }
 
     const itemIndex = cart.items.findIndex(
@@ -63,9 +76,9 @@ router.post("/add", async (req, res) => {
 router.put("/update", async (req, res) => {
   try {
     const { productId, size, quantity } = req.body;
-    const sessionId = req.headers["x-session-id"];
+    const query = await getCartQuery(req);
 
-    const cart = await Cart.findOne({ sessionId });
+    const cart = await Cart.findOne(query);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
     const itemIndex = cart.items.findIndex(
@@ -88,9 +101,9 @@ router.put("/update", async (req, res) => {
 router.delete("/remove", async (req, res) => {
   try {
     const { productId, size } = req.body;
-    const sessionId = req.headers["x-session-id"];
+    const query = await getCartQuery(req);
 
-    const cart = await Cart.findOne({ sessionId });
+    const cart = await Cart.findOne(query);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
 
     cart.items = cart.items.filter(
@@ -108,8 +121,8 @@ router.delete("/remove", async (req, res) => {
 // Clear cart
 router.delete("/clear", async (req, res) => {
   try {
-    const sessionId = req.headers["x-session-id"];
-    const cart = await Cart.findOne({ sessionId });
+    const query = await getCartQuery(req);
+    const cart = await Cart.findOne(query);
     if (cart) {
       cart.items = [];
       await cart.save();
@@ -122,8 +135,48 @@ router.delete("/clear", async (req, res) => {
 
 // Merge guest cart to user cart
 router.post("/merge", async (req, res) => {
-  // Basic merge logic for now
-  res.status(200).json({ message: "Merged" });
+  try {
+    const userId = await getUserId(req);
+    const { sessionId } = req.body;
+
+    if (!userId || !sessionId) {
+      return res.status(400).json({ message: "Missing userId or sessionId" });
+    }
+
+    const guestCart = await Cart.findOne({ sessionId });
+    if (!guestCart || guestCart.items.length === 0) {
+      return res.status(200).json({ message: "Nothing to merge" });
+    }
+
+    let userCart = await Cart.findOne({ user: userId });
+    if (!userCart) {
+      userCart = new Cart({ user: userId, items: [] });
+    }
+
+    // Merge logic
+    guestCart.items.forEach((gItem) => {
+      const existingItem = userCart.items.find(
+        (uItem) =>
+          uItem.product.toString() === gItem.product.toString() &&
+          uItem.size === gItem.size
+      );
+      if (existingItem) {
+        existingItem.quantity += gItem.quantity;
+      } else {
+        userCart.items.push(gItem);
+      }
+    });
+
+    await userCart.save();
+
+    // Clear guest cart
+    guestCart.items = [];
+    await guestCart.save();
+
+    res.status(200).json(userCart);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 export default router;

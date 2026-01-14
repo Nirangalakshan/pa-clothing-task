@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPackage, FiCalendar, FiMapPin, FiChevronDown, FiChevronUp, FiExternalLink, FiTruck } from 'react-icons/fi';
+import { FiPackage, FiCalendar, FiChevronDown, FiChevronUp, FiExternalLink } from 'react-icons/fi';
 import { ordersAPI } from '../api';
 
 const Orders = () => {
@@ -11,7 +11,7 @@ const Orders = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const data = await ordersAPI.getAll();
+                const data = await ordersAPI.getMyOrders();
                 setOrders(data || []);
             } catch (error) {
                 console.error('Error fetching orders:', error);
@@ -43,9 +43,9 @@ const Orders = () => {
 
     const getStatusColor = (status) => {
         switch (status?.toLowerCase()) {
-            case 'delivered': return 'bg-green-500/10 text-green-500 border-green-500/20';
-            case 'shipped': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
-            case 'processing': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
+            case 'completed': return 'bg-green-500/10 text-green-500 border-green-500/20';
+            case 'processing': return 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+            case 'pending': return 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20';
             default: return 'bg-white/10 text-white/50 border-white/5';
         }
     };
@@ -67,7 +67,7 @@ const Orders = () => {
                 <div className="flex flex-col mb-12">
                     <h1 className="text-4xl font-extrabold text-white mb-2 tracking-tight">Order History</h1>
                     <div className="w-20 h-1.5 btn-gradient rounded-full"></div>
-                    <p className="mt-4 text-white/50 font-medium font-medium">Keep track of all your PA Clothing purchases</p>
+                    <p className="mt-4 text-white/50 font-medium">Keep track of all your PA Clothing purchases</p>
                 </div>
 
                 {orders.length === 0 ? (
@@ -90,7 +90,7 @@ const Orders = () => {
                                     className="p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-6 cursor-pointer select-none"
                                     onClick={() => toggleOrder(order._id)}
                                 >
-                                    <div className="grid grid-cols-2 md:flex md:items-center gap-8 md:flex-grow">
+                                    <div className="grid grid-cols-2 md:flex md:items-center gap-8 md:grow">
                                         <div className="flex flex-col gap-1">
                                             <span className="text-white/30 text-[10px] font-black uppercase tracking-widest leading-none">Order ID</span>
                                             <span className="text-white font-mono text-sm font-bold truncate max-w-[120px]">#{order._id.slice(-8).toUpperCase()}</span>
@@ -135,7 +135,7 @@ const Orders = () => {
                                                             <div className="w-20 h-20 rounded-xl overflow-hidden border border-white/5 shrink-0">
                                                                 <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                                             </div>
-                                                            <div className="flex flex-col justify-center flex-grow py-1">
+                                                            <div className="flex flex-col justify-center grow py-1">
                                                                 <div className="flex justify-between items-start">
                                                                     <div className="flex flex-col gap-1">
                                                                         <span className="text-white font-black leading-tight">{item.name}</span>
@@ -151,22 +151,9 @@ const Orders = () => {
 
                                             {/* Order Side Info */}
                                             <div className="flex flex-col gap-10">
-                                                <div>
-                                                    <h4 className="text-white font-bold uppercase tracking-widest text-xs flex items-center gap-2 mb-4">
-                                                        <FiMapPin className="text-primary" />
-                                                        Shipping Address
-                                                    </h4>
-                                                    <div className="p-6 glass rounded-2xl border-white/5 text-sm text-white/60 leading-relaxed shadow-inner">
-                                                        <p className="font-black text-white mb-1">{order.shippingAddress?.street}</p>
-                                                        <p>{order.shippingAddress?.city}, {order.shippingAddress?.state}</p>
-                                                        <p>{order.shippingAddress?.zipCode}, {order.shippingAddress?.country}</p>
-                                                    </div>
-                                                </div>
-
                                                 <div className="flex flex-col gap-4">
                                                     <button className="w-full py-4 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg group">
-                                                        <FiTruck className="group-hover:translate-x-1 transition-transform" />
-                                                        Track Package
+                                                        View Order Status
                                                     </button>
                                                     <button className="w-full py-4 text-primary font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:opacity-70 transition-all">
                                                         Download Invoice

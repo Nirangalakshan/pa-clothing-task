@@ -156,11 +156,10 @@ export const cartAPI = {
 
 // Orders API
 export const ordersAPI = {
-  checkout: async (shippingAddress) => {
+  checkout: async () => {
     const response = await fetch(`${API_BASE_URL}/orders/checkout`, {
       method: "POST",
       headers: getHeaders(),
-      body: JSON.stringify({ shippingAddress }),
     });
     return response.json();
   },

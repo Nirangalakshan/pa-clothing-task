@@ -9,23 +9,7 @@ const router = express.Router();
 // Create order (checkout)
 router.post("/checkout", protect, async (req, res) => {
   try {
-    const { shippingAddress } = req.body;
     const userId = req.user._id;
-
-    // Validate shipping address
-    if (
-      !shippingAddress ||
-      !shippingAddress.fullName ||
-      !shippingAddress.address ||
-      !shippingAddress.city ||
-      !shippingAddress.postalCode ||
-      !shippingAddress.country ||
-      !shippingAddress.phone
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Complete shipping address is required" });
-    }
 
     // Get user's cart
     const cart = await Cart.findOne({ user: userId }).populate("items.product");
@@ -54,7 +38,6 @@ router.post("/checkout", protect, async (req, res) => {
       user: userId,
       items: orderItems,
       totalPrice,
-      shippingAddress,
       orderDate: new Date(),
     });
 

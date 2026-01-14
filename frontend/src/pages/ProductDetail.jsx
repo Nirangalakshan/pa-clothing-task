@@ -57,7 +57,8 @@ const ProductDetail = () => {
                     border: '1px solid rgba(102, 126, 234, 0.3)'
                 }
             });
-        } catch (error) {
+        } catch (err) {
+            console.error('Failed to add to cart:', err);
             toast.error('Failed to add to cart');
         } finally {
             setAdding(false);
@@ -75,7 +76,7 @@ const ProductDetail = () => {
         return (
             <div className="pt-[70px] min-h-screen">
                 <div className="max-w-[1200px] mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <div className="aspect-[4/5] bg-white/5 rounded-3xl animate-pulse border border-white/10"></div>
+                    <div className="aspect-4/5 bg-white/5 rounded-3xl animate-pulse border border-white/10"></div>
                     <div className="flex flex-col gap-6">
                         <div className="h-10 w-3/4 bg-white/5 rounded-xl animate-pulse"></div>
                         <div className="h-8 w-1/4 bg-white/5 rounded-xl animate-pulse"></div>
@@ -133,7 +134,7 @@ const ProductDetail = () => {
                                     In Stock
                                 </span>
                                 <span className="text-white/40 text-sm font-medium flex items-center gap-2">
-                                    🚚 Free Shipping Available
+                                    ✨ Premium Quality Guaranteed
                                 </span>
                             </div>
                         </div>
@@ -213,10 +214,10 @@ const ProductDetail = () => {
                         {/* Feature Badges */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
                             <div className="flex items-center gap-4 glass p-5 rounded-2xl border-white/5 transition-all hover:bg-white/10 group">
-                                <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">🚚</span>
+                                <span className="text-3xl grayscale group-hover:grayscale-0 transition-all">✨</span>
                                 <div className="flex flex-col">
-                                    <strong className="text-white text-sm">Free Delivery</strong>
-                                    <p className="text-white/40 text-[10px] uppercase">Orders over $100</p>
+                                    <strong className="text-white text-sm">Best Quality</strong>
+                                    <p className="text-white/40 text-[10px] uppercase">Crafted with care</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4 glass p-5 rounded-2xl border-white/5 transition-all hover:bg-white/10 group">

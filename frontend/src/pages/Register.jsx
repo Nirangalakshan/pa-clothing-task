@@ -84,7 +84,7 @@ const Register = () => {
                             {[
                                 'Exclusive seasonal drops',
                                 'Early access to sales',
-                                'Free shipping rewards',
+                                'Priority customer support',
                                 'Member-only events'
                             ].map((item, i) => (
                                 <li key={i} className="flex items-center gap-3 text-white/70 font-medium">

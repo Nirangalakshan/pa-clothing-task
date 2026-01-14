@@ -40,8 +40,8 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center pt-[70px] pb-12 px-6 overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
+            <div className="absolute top-0 right-0 w-[500px] h-[450px] bg-primary/10 rounded-full blur-[120px] -z-10 translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-[500px] h-[450px] bg-secondary/10 rounded-full blur-[120px] -z-10 -translate-x-1/2 translate-y-1/2"></div>
             
             <div className="max-w-[1000px] w-full grid grid-cols-1 lg:grid-cols-2 glass p-4 md:p-8 rounded-[3rem] border border-white/5 shadow-2xl overflow-hidden min-h-[600px]">
                 {/* Form Side */}

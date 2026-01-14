@@ -13,8 +13,8 @@ const Home = () => {
             try {
                 const data = await productsAPI.getAll({ limit: 8 });
                 setFeaturedProducts(data.products || []);
-            } catch (error) {
-                console.error('Error fetching products:', error);
+            } catch (err) {
+                console.error('Error fetching products:', err);
             } finally {
                 setLoading(false);
             }
@@ -29,7 +29,7 @@ const Home = () => {
     ];
 
     const features = [
-        { icon: <FiTruck />, title: 'Free Shipping', description: 'On orders over $100' },
+        { icon: <FiRefreshCw />, title: 'Premium Quality', description: 'Handcrafted perfection' },
         { icon: <FiRefreshCw />, title: 'Easy Returns', description: '30-day return policy' },
         { icon: <FiHeadphones />, title: '24/7 Support', description: 'Always here to help' },
         { icon: <FiShoppingBag />, title: 'Secure Payment', description: 'Safe & encrypted' }
@@ -78,7 +78,7 @@ const Home = () => {
                 </div>
 
                 <div className="relative flex justify-center lg:justify-end">
-                    <div className="relative aspect-4/5 lg:aspect-square group animate-float rounded-[2rem] overflow-hidden shadow-2xl border border-white/10">
+                    <div className="relative aspect-4/5 lg:aspect-square group animate-float rounded-4xl overflow-hidden shadow-2xl border border-white/10">
                         <img 
                             src="https://images.unsplash.com/photo-1558171813-4c088753af8f?w=800" 
                             alt="Fashion Model" 
@@ -159,7 +159,7 @@ const Home = () => {
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                         {[...Array(4)].map((_, i) => (
-                            <div key={i} className="aspect-[3/4] bg-white/5 rounded-2xl animate-pulse border border-white/10"></div>
+                            <div key={i} className="aspect-4/5 bg-white/5 rounded-3xl animate-pulse border border-white/10"></div>
                         ))}
                     </div>
                 ) : (
@@ -179,7 +179,7 @@ const Home = () => {
             </section>
 
             {/* CTA Section */}
-            <section className="px-6 py-32 mt-20 bg-gradient-to-b from-transparent via-primary/5 to-transparent border-t border-b border-white/10 flex justify-center text-center">
+            <section className="px-6 py-32 mt-20 bg-linear-to-b from-transparent via-primary/5 to-transparent border-t border-b border-white/10 flex justify-center text-center">
                 <div className="max-w-2xl flex flex-col items-center gap-6">
                     <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
                         Ready to upgrade your wardrobe?

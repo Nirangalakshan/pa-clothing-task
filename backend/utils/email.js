@@ -68,17 +68,6 @@ export const sendOrderConfirmationEmail = async (email, order, username) => {
             </tfoot>
           </table>
 
-          <div style="margin-top: 20px;">
-            <p><strong>Shipping to:</strong></p>
-            <p style="margin: 5px 0; color: #555;">
-              ${order.shippingAddress.fullName}<br>
-              ${order.shippingAddress.address}<br>
-              ${order.shippingAddress.city}, ${
-      order.shippingAddress.postalCode
-    }<br>
-              ${order.shippingAddress.country}
-            </p>
-          </div>
         </div>
         <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 12px; color: #888;">
           <p>© 2026 PA Clothing. All rights reserved.</p>

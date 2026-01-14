@@ -13,23 +13,18 @@ const Cart = () => {
         if (newQuantity >= 1 && newQuantity <= 10) {
             try {
                 await updateQuantity(productId, size, newQuantity);
-            } catch (error) {
+            } catch (err) {
+                console.error('Failed to update quantity:', err);
                 toast.error('Failed to update quantity');
             }
         }
     };
-
     const handleRemove = async (productId, size) => {
         try {
             await removeFromCart(productId, size);
-            toast.success('Item removed from cart', {
-                style: {
-                    background: '#1f1f2e',
-                    color: '#fff',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                }
-            });
-        } catch (error) {
+            toast.success('Item removed');
+        } catch (err) {
+            console.error('Failed to remove item:', err);
             toast.error('Failed to remove item');
         }
     };
@@ -161,17 +156,13 @@ const Cart = () => {
 
                     {/* Order Summary */}
                     <aside className="lg:sticky lg:top-32 flex flex-col gap-6">
-                        <div className="glass rounded-[2rem] p-8 border border-white/5 shadow-2xl flex flex-col gap-8">
+                        <div className="glass rounded-4xl p-8 border border-white/5 shadow-2xl flex flex-col gap-8">
                             <h2 className="text-2xl font-bold text-white tracking-tight leading-none">Order Summary</h2>
                             
                             <div className="flex flex-col gap-4">
                                 <div className="flex justify-between text-white/60 font-medium">
                                     <span>Subtotal</span>
                                     <span className="text-white">{formatPrice(cartTotal)}</span>
-                                </div>
-                                <div className="flex justify-between text-white/60 font-medium">
-                                    <span>Shipping</span>
-                                    <span className="text-green-400 font-bold uppercase text-xs tracking-widest bg-green-400/10 px-2 py-1 rounded">Free</span>
                                 </div>
                                 <div className="flex justify-between text-white/60 font-medium">
                                     <span>Calculated Tax (8%)</span>
