@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #667eea;
+  --color-secondary: #764ba2;
+  --color-dark-bg: #0f0f14;
+  --color-glass-white: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --font-inter: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-dark-bg text-white font-inter;
+    background: radial-gradient(circle at top right, #1a1a24, #0f0f14);
+    min-height: 100vh;
+  }
+}
+
+@utility glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+@utility glass-card {
+  @apply rounded-2xl transition-all duration-300 bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+@utility text-gradient {
+  @apply bg-clip-text text-transparent bg-linear-to-r from-primary to-secondary;
+}
+
+@utility btn-gradient {
+  @apply bg-linear-to-r from-primary to-secondary hover:shadow-[0_10px_20px_rgba(102,126,234,0.3)] transition-all duration-300;
+}
+
+/* Custom scrollbar and other globals */
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-dark-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary/50 rounded-full hover:bg-primary/70;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@utility animate-float {
+  animation: float 3s ease-in-out infinite;
+}
